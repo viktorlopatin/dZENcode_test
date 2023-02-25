@@ -1,0 +1,22 @@
+{% extends "comments/base.html" %}
+
+{% block content %}
+    <h1>{{post.title}}</h1>
+    <p>{{post.body}}</p>
+
+    <form action="{% url 'index'  %}" method="post", enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_comment.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+
+
+    <ul>
+        {% for comment in post.comments %}
+            <li>
+                {{ comment.text }}
+
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
