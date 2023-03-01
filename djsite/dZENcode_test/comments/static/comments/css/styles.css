@@ -1,0 +1,37 @@
+html, body{
+    font-family: 'arial', 'helvetica', 'sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    color: #444;
+}
+
+div.main{
+    margin-left: 10%;
+}
+
+div.comments-count{
+    display:inline-block;
+    margin-top: 50px;
+}
+
+div.popup-bg{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+}
+
+div.popup{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    background: #ffffff;
+    padding: 20px;
+    transform: translate(-50%, -50%);
+}

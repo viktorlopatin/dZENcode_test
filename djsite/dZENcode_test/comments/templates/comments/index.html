@@ -1,22 +1,46 @@
 {% extends "comments/base.html" %}
+{% load render_comment %}
 
 {% block content %}
-    <h1>{{post.title}}</h1>
-    <p>{{post.body}}</p>
+    <div class="post">
+        <h1>{{post.title}}</h1>
+        <p>{{post.body}}</p>
+    </div>
 
-    <form action="{% url 'index'  %}" method="post", enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form_comment.as_p }}
-        <button type="submit">Add Comment</button>
-    </form>
+     <button class="open-popup" type="submit">Додати коментар</button>
+
+    <div class="comments-count">
+        <h2>Кількість коментарів: {{ post.comments_count }}</h2>
+
+        <div class="sort">
+            <form action="{% url 'index' %}" method="get">
+                <select name="sort">
+                    <option value="new">Нові</option>
+                    <option value="old">Старі</option>
+                    <option value="name">По імені</option>
+                    <option value="email">По email</option>
+                </select>
+                <button type="submit">Сортувати</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup-bg">
+        <div class="popup">
+            <h2>Додати коментар для поста "{{post.title}}"</h2>
+            <form id="form" action="{% url 'index'  %}" method="post", enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form_comment.as_p }}
+                <button class="add-comment" type="submit">Додати коментар</button>
+                <button type="button" class="close-popup">Закрити</button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="comments">
+        {{ comments | render_comments  | safe }}
+    </div>
 
 
-    <ul>
-        {% for comment in post.comments %}
-            <li>
-                {{ comment.text }}
-
-            </li>
-        {% endfor %}
-    </ul>
 {% endblock %}

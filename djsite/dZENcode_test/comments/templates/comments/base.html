@@ -1,11 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>{{ title}}</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'comments/css/styles.css' %}">
 </head>
 <body>
-{% block content %}
-{% endblock %}
+    <div class="main">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="{% static 'comments/js/main.js' %}"></script>
 </body>
 </html>

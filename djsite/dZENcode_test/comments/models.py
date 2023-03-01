@@ -33,9 +33,23 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+
+    def comments(self, sort: str = "default"):
+        comments = Comment.objects.filter(post=self, parent_comment=None)
+        if sort == "old":
+            comments = comments.order_by('datetime')
+        elif sort == "name":
+            comments = comments.order_by('user__name')
+        elif sort == "email":
+            comments = comments.order_by('user__email')
+        else:
+            comments = comments.order_by('-datetime')
+
+        return comments
+
     @property
-    def comments(self):
-        return Comment.objects.filter(post=self)
+    def comments_count(self):
+        return Comment.objects.filter(post=self).count()
 
     @staticmethod
     def get_by_id(pk: int):
@@ -46,9 +60,7 @@ class Comment(models.Model):
     text = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
     file = models.FileField(upload_to='files/%Y/%m/%d/', blank=True, null=True, default=None)
-
     datetime = models.DateTimeField(auto_now_add=True)
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, default=None)
 
@@ -58,6 +70,14 @@ class Comment(models.Model):
     @property
     def children_comments(self):
         return Comment.objects.filter(parent_comment=self)
+
+    @staticmethod
+    def get_by_id(pk: int):
+        try:
+            comment = Comment.objects.get(pk=pk)
+        except Comment.DoesNotExist:
+            comment = None
+        return comment
 
     @staticmethod
     def get_by_post(post: Post):
