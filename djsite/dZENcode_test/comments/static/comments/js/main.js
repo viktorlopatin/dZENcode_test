@@ -16,3 +16,20 @@ $('.close-popup').click(function() {
     form.setAttribute("action", action_default);
     $('.popup-bg').fadeOut(600);
 });
+
+
+var params = window
+    .location
+    .search
+    .replace('?','')
+    .split('&')
+    .reduce(
+        function(p,e){
+            var a = e.split('=');
+            p[ decodeURIComponent(a[0])] = decodeURIComponent(a[1]);
+            return p;
+        },
+        {}
+    );
+
+$('#sort_id').val(params["sort"]);

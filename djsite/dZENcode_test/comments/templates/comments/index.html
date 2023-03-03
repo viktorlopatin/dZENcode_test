@@ -7,14 +7,14 @@
         <p>{{post.body}}</p>
     </div>
 
-     <button class="open-popup" type="submit">Додати коментар</button>
+    <button class="open-popup" type="submit">Додати коментар</button>
 
     <div class="comments-count">
         <h2>Кількість коментарів: {{ post.comments_count }}</h2>
 
         <div class="sort">
-            <form action="{% url 'index' %}" method="get">
-                <select name="sort">
+            <form action="{% url 'index' %}?page={{ page }}" method="get">
+                <select id="sort_id" name="sort">
                     <option value="new">Нові</option>
                     <option value="old">Старі</option>
                     <option value="name">По імені</option>
@@ -24,6 +24,15 @@
             </form>
         </div>
     </div>
+
+    <p>Поточна сторінка: {{ page }}</p>
+    {% if num_pages %}
+        <div class="pagination">
+            {% for i in num_pages %}
+                <a href="?page={{ i }}&sort={{ sort }}">{{ i }}</a>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="popup-bg">
         <div class="popup">
@@ -41,6 +50,5 @@
     <div class="comments">
         {{ comments | render_comments  | safe }}
     </div>
-
 
 {% endblock %}
