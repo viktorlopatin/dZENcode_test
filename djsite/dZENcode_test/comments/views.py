@@ -51,15 +51,13 @@ class ShowPosts(ListView):
                 "text": form.cleaned_data['text'],
                 "file": form.cleaned_data['file'],
                 "user": user,
-                "post": post
             }
 
             if comment_id:
                 parent_comment = Comment.get_by_id(comment_id)
                 params['parent_comment'] = parent_comment
 
-            comment = Comment(**params)
-            comment.save()
+            post.create_comment(**params)
             return redirect('index')
         else:
             return render(request, 'comments/invalid_form.html', {"error": form.errors})

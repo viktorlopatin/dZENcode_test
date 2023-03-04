@@ -1,5 +1,6 @@
 from django.db import models
 from .validators import validate_file_type, validate_file_size
+from bleach import clean
 # Create your models here.
 
 
@@ -54,6 +55,16 @@ class Post(models.Model):
     def get_by_id(pk: int):
         return Post.objects.get(pk=pk)
 
+    def create_comment(self, text: str, user: User, file=None, parent_comment=None):
+
+        allowed_tags = ['a', 'code', 'i', 'strong']
+        text_ = clean(text, tags=allowed_tags, strip=True)
+        text_ = text_.replace('\n', '<br>')
+
+        comment = Comment(text=text_, user=user, post=self, file=file, parent_comment=parent_comment)
+        comment.save()
+        return comment
+
 
 class Comment(models.Model):
     text = models.TextField()
@@ -88,14 +99,3 @@ class Comment(models.Model):
     def get_by_post(post: Post):
         return Comment.objects.filter(post=post)
 
-    @staticmethod
-    def create_by_form(form, post: Post):
-        name = form.cleaned_data['name']
-        email = form.cleaned_data['email']
-        text = form.cleaned_data['text']
-        file = form.cleaned_data['file']
-
-        user = User.get_by_name_and_email(name, email)
-        comment = Comment(text=text, user=user, post=post, file=file)
-        comment.save()
-        return comment

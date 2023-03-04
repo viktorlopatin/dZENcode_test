@@ -1,5 +1,4 @@
 {% extends "comments/base.html" %}
-{% load render_comment %}
 
 {% block content %}
     <div class="post">
@@ -37,6 +36,7 @@
     <div class="popup-bg">
         <div class="popup">
             <h2>Додати коментар для поста "{{post.title}}"</h2>
+            <p>В полі Text ви можете використовувати такі html теги як: a, code, i, strong.</p>
             <form id="form" action="{% url 'index'  %}" method="post", enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form_comment.as_p }}
@@ -47,8 +47,18 @@
         </div>
     </div>
 
+    <div class="open-file-popup-bg">
+        <div class="open-file-popup">
+            <h2>Файл</h2>
+            <p id="file_text"></p>
+            <img id="file_img" class="file_img" src="" alt="">
+            <a id="file_link" class="file_link" href="" download>Завантажити файл</a>
+            <p></p><button type="button" class="file-close-popup">Закрити</button></p>
+        </div>
+    </div>
+
     <div class="comments">
-        {{ comments | render_comments  | safe }}
+          {% include 'comments/draw_comments.html' with comments=comments %}
     </div>
 
 {% endblock %}

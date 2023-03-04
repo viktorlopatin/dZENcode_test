@@ -18,6 +18,38 @@ $('.close-popup').click(function() {
 });
 
 
+$('button.open-file').click(function() {
+    let file_id = $(this).attr('value');
+    let file_format = file_id.split('.').pop();
+
+    if (file_format == 'jpg' || file_format == 'png' || file_format == 'gif') {
+        document.getElementById('file_img').src = file_id;
+    }
+    if (file_format == 'txt') {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', file_id);
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            document.getElementById('file_text').innerHTML = xhr.responseText.replace(/\n/g, '<br>');
+          }
+          else {
+            console.error('Failed to load file');
+          }
+        };
+        xhr.send();
+    }
+
+
+
+    $('.open-file-popup-bg').fadeIn(600);
+});
+$('.file-close-popup').click(function() {
+    document.getElementById('file_img').src = "";
+    document.getElementById('file_text').textContent = "";
+    $('.open-file-popup-bg').fadeOut(600);
+});
+
+
 var params = window
     .location
     .search

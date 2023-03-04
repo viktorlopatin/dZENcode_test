@@ -1,0 +1,17 @@
+<ul>
+    {% for comment in comments %}
+        <li>
+            <h3>{{ comment.user.name }} {{ comment.datetime }}</h3>
+            <p>{{ comment.text|safe }}</p>
+            {% if comment.file %}
+                <button id="open_file" class="open-file" value={{ comment.file.url }}>Переглянути прикріплений файл</button>
+            {% endif %}
+
+            <p><button id="comment_id" class="open-popup" type="submit" value={{ comment.id }}>Відповісти</button></p>
+
+            </li>
+        {% if comment.children_comments %}
+            {% include 'comments/draw_comments.html' with comments=comment.children_comments %}
+        {% endif %}
+    {% endfor %}
+</ul>
