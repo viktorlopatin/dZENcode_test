@@ -1,0 +1,9 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+    working_dir: /dZENcode_test
+    ports:
+      - "8000:8000"
